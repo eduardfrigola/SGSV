@@ -19,6 +19,10 @@ SpaceShip::~SpaceShip()
 
 bool SpaceShip::setup()
 {
+    setPosition(ofPoint(ofGetWidth()/2, ofGetHeight()/2));
+    setDirection(ofPoint(0, 1));
+    setSize(70);
+    
 	// TODO
 	// Initialize spaceships:
 	// - initial positions
@@ -58,7 +62,23 @@ void SpaceShip::update(float elapsedTime)
 
 void SpaceShip::draw(bool debug)
 {
-	
+    ofPushMatrix();
+        glTranslatef(position.x, position.y, 0);
+        glRotatef(rotation / PI * 180, 0,0,1);
+        if(debug)
+        {
+            ofPushStyle();
+            ofNoFill();
+            ofCircle(0, 0, size);
+            ofPopStyle();
+        }
+        
+        //ofScale(size/60,size/60,0);
+        //glTranslatef(-50, -50, 0);
+        ofLine(sin(PI/4)*size, cos(PI/4)*size, 0, -size);
+        ofLine(sin(-PI/4)*size, cos(-PI/4)*size, 0, -size);
+        ofLine(sin(PI/4)*size/1.2, cos(PI/4)*size/1.8, sin(-PI/4)*size/1.2, cos(-PI/4)*size/1.8);
+    ofPopMatrix();
 	// TODO
 	// Draw correctly the SpaceShip, in the Hands On PDF you can find an explanation
 	// on how to manage translations & rotations and how you should send data to OpenGL

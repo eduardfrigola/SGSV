@@ -31,6 +31,8 @@ private:
     void generateAsteroids(int numAsteroids);
     void splitAsteroid(int asteroidID);
     
+    void generatePlayers(int numPlayers);
+    
     void normalizeOfPoint(ofPoint& point);
     
     // TODO
@@ -46,6 +48,8 @@ private:
     vector<Asteroid*> asteroids;
     // TODO
     // Add variables that manage players and maybe bullets
+    
+    vector<SpaceShip*> players;
     
     bool debug;
 		

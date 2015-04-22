@@ -16,6 +16,8 @@ void ofApp::setup()
     // Setup the following elements:
     // - players
     // - listeners? (depends on how you handle messages between entities)
+    generatePlayers(1);
+    
     
     // General logic
     ofBackground(0); // Set background to black
@@ -55,6 +57,10 @@ void ofApp::draw()
     
     // TODO
     // Draw all game entities (bullets? players? effects?)
+    for(int i = 0; i < players.size(); i++)
+    {
+        players[i]->draw(debug);
+    }
     
     if(debug)
     {
@@ -172,6 +178,17 @@ void ofApp::splitAsteroid(int which)
     if(asteroids.size() == 0)
     {
         generateAsteroids(ofRandom(4,6));
+    }
+}
+
+//-------------------------------------------------------------
+void ofApp::generatePlayers(int numPlayers)
+{
+    for ( int i = 0; i < numPlayers; i++ )
+    {
+        SpaceShip* temp = new SpaceShip();
+        temp->setup();
+        players.push_back(temp);
     }
 }
 
