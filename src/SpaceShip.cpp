@@ -8,6 +8,20 @@ SpaceShip::SpaceShip()
 	direction = ofPoint(0, 0);
 
 	rotation = 0;
+    
+    isRotating = 0;
+    
+    gasState = 0;
+    
+    setSpeed(1);
+    
+    rotationSpeed=5*speed;
+    
+    maxVelocity=10*speed;
+    
+    acceleration=0.4*speed;
+    
+    speedVector=ofPoint(0,0);
 
 	ofEvent<ofSpaceShipFireEventArgs> spaceShipFires = ofEvent<ofSpaceShipFireEventArgs>();
 }
@@ -20,8 +34,8 @@ SpaceShip::~SpaceShip()
 bool SpaceShip::setup()
 {
     setPosition(ofPoint(ofGetWidth()/2, ofGetHeight()/2));
-    setDirection(ofPoint(0, 1));
-    setSize(70);
+    setDirection(ofPoint(0, -1));
+    setSize(25);
     
 	// TODO
 	// Initialize spaceships:
@@ -47,6 +61,7 @@ void SpaceShip::update(float elapsedTime)
 	{
 		addThrust(-2);
 	}
+    
 
 	// How firing could be handled with events
 	if(isFiring)
@@ -54,10 +69,52 @@ void SpaceShip::update(float elapsedTime)
 		ofSpaceShipFireEventArgs e = {position, ofPoint(cos(rotation), sin(rotation))};
 		ofNotifyEvent(spaceShipFires, e, this);
 	}
+    
+    addRotation(isRotating*rotationSpeed*elapsedTime);
+    setDirection(ofPoint(sin(getRotation()), -cos(getRotation())).normalized());
+    
+    switch(gasState) {
+        case 1:
+            speedVector+=getDirection()*acceleration;
+            if(speedVector.length()>maxVelocity)
+            {
+                speedVector=speedVector.normalized()*maxVelocity;
+            }
+            cout<<speedVector.length()<<endl;
+            break;
+        case -1:
+            if(speedVector.length()>0)
+            {
+                speedVector-=speedVector.normalized()*0.4;
+            }
+            else{
+                speedVector=ofPoint(0,0);
+            }
+            break;
+        case 0:
+            if(speedVector.length()>=0)
+            {
+                speedVector-=speedVector.normalized()*0.09;
+            }
+            else
+            {
+                speedVector=ofPoint(0,0);
+            }
+            break;
+    }
+    
+    setPosition(getPosition()+speedVector);
+    
+
+
+    
+    //cout<<speedVector<<endl;
 	
 	// TODO
 	// - add spaceship state update
 	// - control spacehsip and window boundaries (i.e. marginSwap)
+    marginsWrap();
+    
 }
 
 void SpaceShip::draw(bool debug)
@@ -72,12 +129,10 @@ void SpaceShip::draw(bool debug)
             ofCircle(0, 0, size);
             ofPopStyle();
         }
-        
-        //ofScale(size/60,size/60,0);
-        //glTranslatef(-50, -50, 0);
-        ofLine(sin(PI/4)*size, cos(PI/4)*size, 0, -size);
-        ofLine(sin(-PI/4)*size, cos(-PI/4)*size, 0, -size);
-        ofLine(sin(PI/4)*size/1.2, cos(PI/4)*size/1.8, sin(-PI/4)*size/1.2, cos(-PI/4)*size/1.8);
+    
+        ofLine(sin(0.8)*size, cos(0.8)*size, 0, -size);
+        ofLine(sin(-0.8)*size, cos(-0.8)*size, 0, -size);
+        ofLine(sin(0.8)*size/1.2, cos(0.8)*size/1.8, sin(-0.8)*size/1.2, cos(-0.8)*size/1.8);
     ofPopMatrix();
 	// TODO
 	// Draw correctly the SpaceShip, in the Hands On PDF you can find an explanation
@@ -93,26 +148,45 @@ void SpaceShip::addThrust(float thrust)
 	// would be a good idea to clip the maximum speed
 }
 
+void SpaceShip::changeRotation(int direction)
+{
+    this->isRotating=direction;
+}
+
+
+void SpaceShip::updateSpeed(int accelerate)
+{
+    this->gasState=accelerate;
+}
+
+void SpaceShip::updateSpeeds(float speed_now)
+{
+    setSpeed(speed_now);
+    rotationSpeed=5*speed;
+    maxVelocity=10*speed;
+    acceleration=0.4*speed;
+}
+
 void SpaceShip::keyPressed(ofKeyEventArgs & args)
 {
-	switch(args.key){
+	/*switch(args.key){
 		case OF_KEY_UP:
 			thrust = true;
 			break;
 		case ' ':
 			isFiring = true;
 			break;
-	}
+	}*/
 }
 
 void SpaceShip::keyReleased(ofKeyEventArgs & args)
 {
-	switch(args.key){
+	/*switch(args.key){
 		case OF_KEY_UP:
 			thrust = false;
 			break;
 		case ' ':
 			isFiring = true;
 			break;
-	}
+    }*/
 }

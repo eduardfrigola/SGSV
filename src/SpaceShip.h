@@ -25,6 +25,12 @@ class SpaceShip : public Entity
 		virtual void draw(bool debug);
 
 		void addThrust(float thrust);
+    
+        void updateSpeed(int acelerate);
+    
+        void changeRotation(int direction);
+    
+        void updateSpeeds(float speed_now);
 
 		void keyPressed(ofKeyEventArgs & args);
 		void keyReleased(ofKeyEventArgs & args);
@@ -34,4 +40,7 @@ class SpaceShip : public Entity
 	private:
 		// SpaceShip's behaviour control variables
 		bool thrust, isFiring;
+        int isRotating, gasState;
+        float rotationSpeed, acceleration, maxVelocity;
+        ofPoint speedVector;
 };

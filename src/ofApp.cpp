@@ -38,6 +38,11 @@ void ofApp::update()
         asteroids[i]->update(elapsedTime);
     }
     
+    for(int i = 0; i < players.size(); i++)
+    {
+        players[i]->update(elapsedTime);
+    }
+    
     // TODO
     // Implement calls for logic:
     // - players
@@ -202,12 +207,44 @@ void ofApp::keyPressed(int key)
         case 'D':
             debug = !debug;
             break;
+        case OF_KEY_UP:
+            players[0]->updateSpeed(1);
+            break;
+        case OF_KEY_DOWN:
+            players[0]->updateSpeed(-1);
+            break;
+    }
+    switch (key) {
+        case OF_KEY_LEFT:
+            players[0]->changeRotation(-1);
+            cout<<"left"<<endl;
+            break;
+        case OF_KEY_RIGHT:
+            players[0]->changeRotation(1);
+            break;
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
+    switch(key)
+    {
+        case OF_KEY_UP:
+            players[0]->updateSpeed(0);
+            break;
+        case OF_KEY_DOWN:
+            players[0]->updateSpeed(0);
+            break;
+    }
+    switch (key) {
+        case OF_KEY_LEFT:
+            players[0]->changeRotation(0);
+            break;
+        case OF_KEY_RIGHT:
+            players[0]->changeRotation(0);
+            break;
+    }
     
 }
 
