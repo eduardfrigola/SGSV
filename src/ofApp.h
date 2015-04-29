@@ -35,6 +35,8 @@ private:
     
     void normalizeOfPoint(ofPoint& point);
     
+    void killBullet(int & value);
+    
     // TODO
     // Add methods that are responsible of:
     // - check collisions (e.g. between bullets&asteroids, and between players&asteroids)
@@ -50,6 +52,8 @@ private:
     // Add variables that manage players and maybe bullets
     
     vector<SpaceShip*> players;
+    
+    vector<Bullet*> bullets;
     
     bool debug;
 		

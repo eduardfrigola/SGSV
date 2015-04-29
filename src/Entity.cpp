@@ -21,7 +21,7 @@ bool Entity::getCollision(Entity *obj)
 	float distanceBetweenObjects = ofDist(position.x, position.y, obj->getPosition().x, obj->getPosition().y);
 
 	// If it is shorther than the size of one of the objects
-	if(distanceBetweenObjects <= size || distanceBetweenObjects <= obj->getSize()) 
+	if(distanceBetweenObjects <= (size+obj->getSize()) || distanceBetweenObjects <= obj->getSize())
 	{
 		return true;
 	}

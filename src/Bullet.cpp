@@ -1,5 +1,7 @@
 #include "Bullet.h"
 
+ofEvent<int> Bullet::bulletDead = ofEvent<int>();
+
 Bullet::Bullet()
 {
 	position.x = 0;
@@ -8,6 +10,12 @@ Bullet::Bullet()
 	direction = ofPoint(0, 0);
 
 	rotation = 0;
+    
+    //setSize(2);
+    //setSpeed(10);
+    //lifeTime=10;
+    
+    
 }
 
 Bullet::~Bullet(void)
@@ -17,29 +25,42 @@ Bullet::~Bullet(void)
 
 bool Bullet::setup()
 {
-	return false;
+
+    return false;
 }
 
-bool Bullet::setup(ofPoint shipPosition, ofPoint shipDirection, float size, float speed, float lifeTime)
+bool Bullet::setup(ofPoint shipPosition, ofPoint shipDirection, float size_, float speed_, float lifeTime_)
 {
-	position.x = shipPosition.x;
-	position.y = shipPosition.y;
-
-	direction.x = -shipDirection.x;
-	direction.y = -shipDirection.y;
-
-	return true;
+    position.x = shipPosition.x;
+    position.y = shipPosition.y;
+    
+    direction.x = shipDirection.x;
+    direction.y = shipDirection.y;
+    
+    setSize(size_);
+    setSpeed(speed_);
+    lifeTime=lifeTime_;
+    return true;
 }
 
 void Bullet::update(float deltaTime)
 {
-	// TODO
-	// Bullet's logic
+    if(lifeTime>0)
+    {
+        setPosition(getPosition()+getDirection()*getSpeed());
+        marginsWrap();
+        lifeTime-=1;
+    }
+    else{
+        int value=1;
+        ofNotifyEvent(bulletDead, value, this);
+    }
 }
 
 void Bullet::draw(bool debug)
 {	
 	// TODO
 	// Draw bullet
+    ofLine(getPosition(), getPosition()+(getDirection()*getSize()));
 }
 

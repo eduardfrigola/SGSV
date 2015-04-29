@@ -1,5 +1,6 @@
 #pragma once
 #include "ofMain.h"
+#include "Bullet.h"
 
 #include "Entity.h"
 
@@ -20,7 +21,8 @@ class SpaceShip : public Entity
 		SpaceShip();
 		~SpaceShip();
 	
-		virtual bool setup();
+		bool setup(int aidi);
+        virtual bool setup();
 		virtual void update(float deltaTime);
 		virtual void draw(bool debug);
 
@@ -34,14 +36,21 @@ class SpaceShip : public Entity
 
 		void keyPressed(ofKeyEventArgs & args);
 		void keyReleased(ofKeyEventArgs & args);
-
+    
+        void spaceShipReset(int dead);
+    
+        Bullet* fireBullet();
+    
 		ofEvent<ofSpaceShipFireEventArgs> spaceShipFires;
 
+        int deadtime;
+    
 	private:
 		// SpaceShip's behaviour control variables
 		bool thrust, isFiring;
-        int isRotating, gasState;
+        int isRotating, gasState, id_num;
         float rotationSpeed, acceleration, maxVelocity;
         ofPoint speedVector;
         float counter;
+
 };

@@ -16,7 +16,7 @@ void ofApp::setup()
     // Setup the following elements:
     // - players
     // - listeners? (depends on how you handle messages between entities)
-    generatePlayers(1);
+    generatePlayers(2);
     
     
     // General logic
@@ -24,6 +24,9 @@ void ofApp::setup()
     
     // Debug
     debug = false;
+    
+    
+    ofAddListener(Bullet::bulletDead, this, &ofApp::killBullet);
 }
 
 //--------------------------------------------------------------
@@ -43,6 +46,11 @@ void ofApp::update()
         players[i]->update(elapsedTime);
     }
     
+    for(int i = 0; i < bullets.size(); i++)
+    {
+        bullets[i]->update(elapsedTime);
+    }
+    
     // TODO
     // Implement calls for logic:
     // - players
@@ -50,6 +58,33 @@ void ofApp::update()
     // - collisions
     // - game conditions
     // [...]
+    
+    //collision players
+    for(int i = 0; i < players.size(); i++)
+    {
+        for(int j = 0; j < asteroids.size(); j++)
+        {
+            if(players[i]->deadtime<=0 && players[i]->getCollision(asteroids[j]))
+            {
+                players[i]->spaceShipReset(asteroids[j]->getSize());
+                break;
+            }
+        }
+    }
+    
+    //bullet collision
+    for(int i = 0; i < bullets.size(); i++)
+    {
+        for(int j = 0; j < asteroids.size(); j++)
+        {
+            if(bullets[i]->getCollision(asteroids[j]))
+            {
+                splitAsteroid(j);
+                bullets.erase(bullets.begin()+i);
+            }
+        }
+        
+    }
 }
 
 //--------------------------------------------------------------
@@ -66,6 +101,12 @@ void ofApp::draw()
     {
         players[i]->draw(debug);
     }
+    
+    for(int i = 0; i < bullets.size(); i++)
+    {
+        bullets[i]->draw(debug);
+    }
+    
     
     if(debug)
     {
@@ -192,21 +233,27 @@ void ofApp::generatePlayers(int numPlayers)
     for ( int i = 0; i < numPlayers; i++ )
     {
         SpaceShip* temp = new SpaceShip();
-        temp->setup();
+        temp->setup(i);
         players.push_back(temp);
     }
+}
+
+
+void ofApp::killBullet(int & value)
+{
+    bullets.erase(bullets.begin());
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
+    Bullet* temp=new Bullet;
     switch(key)
     {
             // If pressed Dm change debug mode
-        case 'd':
-        case 'D':
-            debug = !debug;
-            break;
+        //case 't':
+        //    debug = !debug;
+        //    break;
         case OF_KEY_UP:
             players[0]->updateSpeed(1);
             break;
@@ -219,6 +266,25 @@ void ofApp::keyPressed(int key)
         case OF_KEY_RIGHT:
             players[0]->changeRotation(1);
             break;
+        case ' ':
+            temp = players[0]->fireBullet();
+            bullets.push_back(temp);
+            break;
+        case 'w':
+            players[1]->updateSpeed(1);
+            break;
+        case 's':
+            players[1]->updateSpeed(-1);
+            break;
+        case 'a':
+            players[1]->changeRotation(-1);
+            break;
+        case 'd':
+            players[1]->changeRotation(1);
+            break;
+        case 'q':
+            temp = players[1]->fireBullet();
+            bullets.push_back(temp);
     }
 }
 
@@ -233,13 +299,23 @@ void ofApp::keyReleased(int key)
         case OF_KEY_DOWN:
             players[0]->updateSpeed(0);
             break;
-    }
-    switch (key) {
         case OF_KEY_LEFT:
             players[0]->changeRotation(0);
             break;
         case OF_KEY_RIGHT:
             players[0]->changeRotation(0);
+            break;
+        case 'w':
+            players[1]->updateSpeed(0);
+            break;
+        case 's':
+            players[1]->updateSpeed(0);
+            break;
+        case 'a':
+            players[1]->changeRotation(0);
+            break;
+        case 'd':
+            players[1]->changeRotation(0);
             break;
     }
     

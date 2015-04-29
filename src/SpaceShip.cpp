@@ -17,11 +17,13 @@ SpaceShip::SpaceShip()
     
     rotationSpeed=5*speed;
     
-    maxVelocity=10*speed;
+    maxVelocity=8*speed;
     
     acceleration=0.4*speed;
     
     speedVector=ofPoint(0,0);
+    
+    deadtime=0;
 
 	ofEvent<ofSpaceShipFireEventArgs> spaceShipFires = ofEvent<ofSpaceShipFireEventArgs>();
 }
@@ -29,6 +31,12 @@ SpaceShip::SpaceShip()
 SpaceShip::~SpaceShip()
 {
 	
+}
+
+bool SpaceShip::setup(int aidi)
+{
+    id_num=aidi;
+    return setup();
 }
 
 bool SpaceShip::setup()
@@ -64,42 +72,44 @@ void SpaceShip::update(float elapsedTime)
     
 
 	// How firing could be handled with events
-	if(isFiring)
-	{
-		ofSpaceShipFireEventArgs e = {position, ofPoint(cos(rotation), sin(rotation))};
-		ofNotifyEvent(spaceShipFires, e, this);
-	}
+	//if(isFiring)
+	//{
+	//	ofSpaceShipFireEventArgs e = {position, ofPoint(cos(rotation), sin(rotation))};
+	//	ofNotifyEvent(spaceShipFires, e, this);
+	//}
     
     addRotation(isRotating*rotationSpeed*elapsedTime);
     setDirection(ofPoint(sin(getRotation()), -cos(getRotation())).normalized());
     
-    switch(gasState) {
-        case 1:
-            speedVector+=getDirection()*acceleration;
-            if(speedVector.length()>maxVelocity)
-            {
-                speedVector=speedVector.normalized()*maxVelocity;
-            }
-            break;
-        case -1:
-            if(speedVector.length()>0)
-            {
-                speedVector-=speedVector.normalized()*0.4;
-            }
-            else{
-                speedVector=ofPoint(0,0);
-            }
-            break;
-        case 0:
-            if(speedVector.length()>=0)
-            {
-                speedVector-=speedVector.normalized()*0.09;
-            }
-            else
-            {
-                speedVector=ofPoint(0,0);
-            }
-            break;
+    if(deadtime<=0){
+        switch(gasState) {
+            case 1:
+                speedVector+=getDirection()*acceleration;
+                if(speedVector.length()>maxVelocity)
+                {
+                    speedVector=speedVector.normalized()*maxVelocity;
+                }
+                break;
+            case -1:
+                if(speedVector.length()>0)
+                {
+                    speedVector-=speedVector.normalized()*0.4;
+                }
+                else{
+                    speedVector=ofPoint(0,0);
+                }
+                break;
+            case 0:
+                if(speedVector.length()>0)
+                {
+                    speedVector-=speedVector.normalized()*0.09;
+                }
+                else
+                {
+                    speedVector=ofPoint(0,0);
+                }
+                break;
+        }
     }
     
     setPosition(getPosition()+speedVector);
@@ -128,24 +138,63 @@ void SpaceShip::draw(bool debug)
             ofPopStyle();
         }
     
-        ofLine(sin(0.8)*size, cos(0.8)*size, 0, -size);
-        ofLine(sin(-0.8)*size, cos(-0.8)*size, 0, -size);
-        ofLine(sin(0.8)*size/1.2, cos(0.8)*size/1.8, sin(-0.8)*size/1.2, cos(-0.8)*size/1.8);
+        if(deadtime<=0){
+            ofLine(sin(0.8)*size, cos(0.8)*size, 0, -size);
+            ofLine(sin(-0.8)*size, cos(-0.8)*size, 0, -size);
+            ofLine(sin(0.8)*size/1.2, cos(0.8)*size/1.8, sin(-0.8)*size/1.2, cos(-0.8)*size/1.8);
+            /*ofPushStyle();
+            ofSetColor(255);
+            ofDrawBitmapString(ofToString(id_num+1), -4, 2);
+            ofPopStyle();*/
+            
+            if ( id_num == 0 )
+            {
+                ofPushStyle();
+                ofSetColor(255,0,0,80);
+                ofTriangle(sin(0.8)*size/1.2, cos(0.8)*size/1.8,  0, -size,sin(-0.8)*size/1.2, cos(-0.8)*size/1.8);
+                ofPopStyle();
+            }
+            if ( id_num == 1 )
+            {
+                ofPushStyle();
+                ofSetColor(0,0,255,80);
+                ofTriangle(sin(0.8)*size/1.2, cos(0.8)*size/1.8,  0, -size,sin(-0.8)*size/1.2, cos(-0.8)*size/1.8);
+                ofPopStyle();
+            }
+        }
     
-        if (gasState == 1)
+        
+        if (counter > 0.05)
         {
-            if (counter > 0.05)
+            if(deadtime>0)
             {
-                ofLine(sin(0.8)*size/1.2-size/1.1, cos(0.8)*size/1.8, 0, +size);
-                ofLine(sin(-0.8)*size/1.2+size/1.1, cos(-0.8)*size/1.8, 0, +size);
-                counter = 0;
-            }else
+                ofLine(sin(0.8)*size, cos(0.8)*size, 0, -size);
+                ofLine(sin(-0.8)*size, cos(-0.8)*size, 0, -size);
+                ofLine(sin(0.8)*size/1.2, cos(0.8)*size/1.8, sin(-0.8)*size/1.2, cos(-0.8)*size/1.8);
+                deadtime-=3;
+            }
+            counter = 0;
+        }else
+        {
+            counter += ofGetLastFrameTime();
+        }
+        
+        
+            if (gasState == 1 && deadtime<=0)
             {
-                counter += ofGetLastFrameTime();
+                if (counter > 0.05)
+                {
+                    ofLine(sin(0.8)*size/1.2-size/1.1, cos(0.8)*size/1.8, 0, +size);
+                    ofLine(sin(-0.8)*size/1.2+size/1.1, cos(-0.8)*size/1.8, 0, +size);
+                    counter = 0;
+                }else
+                {
+                    counter += ofGetLastFrameTime();
+                }
+
             }
 
-        }
-
+    
     
     ofPopMatrix();
 	// TODO
@@ -170,7 +219,7 @@ void SpaceShip::changeRotation(int direction)
 
 void SpaceShip::updateSpeed(int accelerate)
 {
-    this->gasState=accelerate;
+        this->gasState=accelerate;
 }
 
 void SpaceShip::updateSpeeds(float speed_now)
@@ -179,6 +228,23 @@ void SpaceShip::updateSpeeds(float speed_now)
     rotationSpeed=5*speed;
     maxVelocity=10*speed;
     acceleration=0.4*speed;
+}
+
+
+Bullet* SpaceShip::fireBullet()
+{
+    int bulletlife=35;
+    if(deadtime>0){bulletlife=0;}
+    Bullet* tempbullet=new Bullet;
+    tempbullet->setup(getPosition()+size*getDirection(), getDirection(), 15, 12, bulletlife);
+    return tempbullet;
+}
+
+
+void SpaceShip::spaceShipReset(int dead){
+    setPosition(ofPoint(ofGetWidth()/2, ofGetHeight()/2));
+    speedVector=ofPoint(0,0);
+    deadtime=dead;
 }
 
 void SpaceShip::keyPressed(ofKeyEventArgs & args)
