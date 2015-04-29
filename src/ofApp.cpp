@@ -213,11 +213,8 @@ void ofApp::keyPressed(int key)
         case OF_KEY_DOWN:
             players[0]->updateSpeed(-1);
             break;
-    }
-    switch (key) {
         case OF_KEY_LEFT:
             players[0]->changeRotation(-1);
-            cout<<"left"<<endl;
             break;
         case OF_KEY_RIGHT:
             players[0]->changeRotation(1);

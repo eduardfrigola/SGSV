@@ -43,4 +43,5 @@ class SpaceShip : public Entity
         int isRotating, gasState;
         float rotationSpeed, acceleration, maxVelocity;
         ofPoint speedVector;
+        float counter;
 };

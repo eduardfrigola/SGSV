@@ -80,7 +80,6 @@ void SpaceShip::update(float elapsedTime)
             {
                 speedVector=speedVector.normalized()*maxVelocity;
             }
-            cout<<speedVector.length()<<endl;
             break;
         case -1:
             if(speedVector.length()>0)
@@ -108,7 +107,6 @@ void SpaceShip::update(float elapsedTime)
 
 
     
-    //cout<<speedVector<<endl;
 	
 	// TODO
 	// - add spaceship state update
@@ -133,6 +131,22 @@ void SpaceShip::draw(bool debug)
         ofLine(sin(0.8)*size, cos(0.8)*size, 0, -size);
         ofLine(sin(-0.8)*size, cos(-0.8)*size, 0, -size);
         ofLine(sin(0.8)*size/1.2, cos(0.8)*size/1.8, sin(-0.8)*size/1.2, cos(-0.8)*size/1.8);
+    
+        if (gasState == 1)
+        {
+            if (counter > 0.05)
+            {
+                ofLine(sin(0.8)*size/1.2-size/1.1, cos(0.8)*size/1.8, 0, +size);
+                ofLine(sin(-0.8)*size/1.2+size/1.1, cos(-0.8)*size/1.8, 0, +size);
+                counter = 0;
+            }else
+            {
+                counter += ofGetLastFrameTime();
+            }
+
+        }
+
+    
     ofPopMatrix();
 	// TODO
 	// Draw correctly the SpaceShip, in the Hands On PDF you can find an explanation
