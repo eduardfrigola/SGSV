@@ -10,6 +10,7 @@
 		5A4349E9754D6FA14C0F2A3A /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC5DA1C87211D4F6377DA719 /* tinyxmlparser.cpp */; };
 		63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */; };
 		933A2227713C720CEFF80FD9 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */; };
+		9A6C79E41AF1673F004A9AC0 /* PowerUp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A6C79E21AF1673F004A9AC0 /* PowerUp.cpp */; };
 		9D44DC88EF9E7991B4A09951 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 832BDC407620CDBA568B713D /* tinyxmlerror.cpp */; };
 		9F6995061AE7DD200014FA59 /* Asteroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F6994FB1AE7DD200014FA59 /* Asteroid.cpp */; };
 		9F6995071AE7DD200014FA59 /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F6994FD1AE7DD200014FA59 /* Bullet.cpp */; };
@@ -71,6 +72,8 @@
 		2B40EDA85BEB63E46785BC29 /* tinyxml.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tinyxml.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxml.cpp; sourceTree = SOURCE_ROOT; };
 		50DF87D612C5AAE17AAFA6C0 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxXmlSettings.cpp; path = ../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp; sourceTree = SOURCE_ROOT; };
 		832BDC407620CDBA568B713D /* tinyxmlerror.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = tinyxmlerror.cpp; path = ../../../addons/ofxXmlSettings/libs/tinyxmlerror.cpp; sourceTree = SOURCE_ROOT; };
+		9A6C79E21AF1673F004A9AC0 /* PowerUp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PowerUp.cpp; sourceTree = "<group>"; };
+		9A6C79E31AF1673F004A9AC0 /* PowerUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PowerUp.h; sourceTree = "<group>"; };
 		9F6994FB1AE7DD200014FA59 /* Asteroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Asteroid.cpp; sourceTree = "<group>"; };
 		9F6994FC1AE7DD200014FA59 /* Asteroid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asteroid.h; sourceTree = "<group>"; };
 		9F6994FD1AE7DD200014FA59 /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
@@ -243,6 +246,8 @@
 				9F6995011AE7DD200014FA59 /* main.cpp */,
 				9F6995041AE7DD200014FA59 /* SpaceShip.cpp */,
 				9F6995051AE7DD200014FA59 /* SpaceShip.h */,
+				9A6C79E21AF1673F004A9AC0 /* PowerUp.cpp */,
+				9A6C79E31AF1673F004A9AC0 /* PowerUp.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -343,6 +348,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A6C79E41AF1673F004A9AC0 /* PowerUp.cpp in Sources */,
 				63B57AC5BF4EF088491E0317 /* ofxXmlSettings.cpp in Sources */,
 				9F6995071AE7DD200014FA59 /* Bullet.cpp in Sources */,
 				9F6995081AE7DD200014FA59 /* Entity.cpp in Sources */,

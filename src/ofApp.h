@@ -6,6 +6,7 @@
 
 #include "Asteroid.h"
 #include "Bullet.h"
+#include "PowerUp.h"
 #include "SpaceShip.h"
 
 class ofApp : public ofBaseApp{
@@ -32,6 +33,8 @@ private:
     void splitAsteroid(int asteroidID);
     
     void generatePlayers(int numPlayers);
+    void generatePowerUps();
+
     
     void normalizeOfPoint(ofPoint& point);
     
@@ -54,6 +57,9 @@ private:
     vector<SpaceShip*> players;
     
     vector<Bullet*> bullets;
+    
+    vector<PowerUp*> powerups;
+
     
     bool debug;
 		

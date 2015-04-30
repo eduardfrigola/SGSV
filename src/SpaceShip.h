@@ -39,11 +39,17 @@ class SpaceShip : public Entity
     
         void spaceShipReset(int dead);
     
-        Bullet* fireBullet();
+        Bullet* fireBullet(int playerid);
+    
+        void addScore();
+    
+        void speedUp();
+    
+        int getScore();
     
 		ofEvent<ofSpaceShipFireEventArgs> spaceShipFires;
 
-        int deadtime;
+        int deadtime, score;
     
 	private:
 		// SpaceShip's behaviour control variables

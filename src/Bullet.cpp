@@ -29,7 +29,7 @@ bool Bullet::setup()
     return false;
 }
 
-bool Bullet::setup(ofPoint shipPosition, ofPoint shipDirection, float size_, float speed_, float lifeTime_)
+bool Bullet::setup(ofPoint shipPosition, ofPoint shipDirection, float size_, float speed_, float lifeTime_, int playerid_)
 {
     position.x = shipPosition.x;
     position.y = shipPosition.y;
@@ -40,6 +40,7 @@ bool Bullet::setup(ofPoint shipPosition, ofPoint shipDirection, float size_, flo
     setSize(size_);
     setSpeed(speed_);
     lifeTime=lifeTime_;
+    playerid=playerid_;
     return true;
 }
 

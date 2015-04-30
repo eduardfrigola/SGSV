@@ -3,6 +3,7 @@
 SpaceShip::SpaceShip()
 {
 	position.x = 0;
+    
 	position.y = 0;
 	
 	direction = ofPoint(0, 0);
@@ -13,17 +14,19 @@ SpaceShip::SpaceShip()
     
     gasState = 0;
     
-    setSpeed(1);
+    speed = 0;
     
-    rotationSpeed=5*speed;
+    rotationSpeed=0;
     
-    maxVelocity=8*speed;
+    maxVelocity=0;
     
-    acceleration=0.4*speed;
+    acceleration=0;
     
     speedVector=ofPoint(0,0);
     
     deadtime=0;
+    
+    score=0;
 
 	ofEvent<ofSpaceShipFireEventArgs> spaceShipFires = ofEvent<ofSpaceShipFireEventArgs>();
 }
@@ -44,6 +47,14 @@ bool SpaceShip::setup()
     setPosition(ofPoint(ofGetWidth()/2, ofGetHeight()/2));
     setDirection(ofPoint(0, -1));
     setSize(25);
+    setSpeed(1);
+    
+    rotationSpeed=5*speed;
+    
+    maxVelocity=8*speed;
+    
+    acceleration=0.4*speed;
+
     
 	// TODO
 	// Initialize spaceships:
@@ -180,19 +191,19 @@ void SpaceShip::draw(bool debug)
         }
         
         
-            if (gasState == 1 && deadtime<=0)
+        if (gasState == 1 && deadtime<=0)
+        {
+            if (counter > 0.05)
             {
-                if (counter > 0.05)
-                {
-                    ofLine(sin(0.8)*size/1.2-size/1.1, cos(0.8)*size/1.8, 0, +size);
-                    ofLine(sin(-0.8)*size/1.2+size/1.1, cos(-0.8)*size/1.8, 0, +size);
-                    counter = 0;
-                }else
-                {
-                    counter += ofGetLastFrameTime();
-                }
-
+                ofLine(sin(0.8)*size/1.2-size/1.1, cos(0.8)*size/1.8, 0, +size);
+                ofLine(sin(-0.8)*size/1.2+size/1.1, cos(-0.8)*size/1.8, 0, +size);
+                counter = 0;
+            }else
+            {
+                counter += ofGetLastFrameTime();
             }
+
+        }
 
     
     
@@ -231,12 +242,12 @@ void SpaceShip::updateSpeeds(float speed_now)
 }
 
 
-Bullet* SpaceShip::fireBullet()
+Bullet* SpaceShip::fireBullet(int playerid)
 {
     int bulletlife=35;
     if(deadtime>0){bulletlife=0;}
     Bullet* tempbullet=new Bullet;
-    tempbullet->setup(getPosition()+size*getDirection(), getDirection(), 15, 12, bulletlife);
+    tempbullet->setup(getPosition()+size*getDirection(), getDirection(), 15, 12, bulletlife, playerid);
     return tempbullet;
 }
 
@@ -245,6 +256,21 @@ void SpaceShip::spaceShipReset(int dead){
     setPosition(ofPoint(ofGetWidth()/2, ofGetHeight()/2));
     speedVector=ofPoint(0,0);
     deadtime=dead;
+}
+
+void SpaceShip::addScore()
+{
+    score+=1;
+}
+
+
+int SpaceShip::getScore()
+{
+    return score;
+}
+
+void SpaceShip::speedUp()
+{
 }
 
 void SpaceShip::keyPressed(ofKeyEventArgs & args)

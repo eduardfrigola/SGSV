@@ -25,6 +25,8 @@ void ofApp::setup()
     // Debug
     debug = false;
     
+    generatePowerUps();
+    
     
     ofAddListener(Bullet::bulletDead, this, &ofApp::killBullet);
 }
@@ -51,6 +53,11 @@ void ofApp::update()
         bullets[i]->update(elapsedTime);
     }
     
+    for(int i = 0; i < powerups.size(); i++)
+    {
+        powerups[i]->update(elapsedTime);
+    }
+    
     // TODO
     // Implement calls for logic:
     // - players
@@ -70,6 +77,28 @@ void ofApp::update()
                 break;
             }
         }
+        
+        for(int j = 0; j < powerups.size(); j++)
+        {
+            if(players[i]->deadtime<=0 && players[i]->getCollision(powerups[j]))
+            {
+                //powerups[j]->activate(players[i]);
+                if (powerups[j] ->type == SPEEDUP)
+                {
+                    players[i]->updateSpeeds(1.5);
+                }
+                if (powerups[j] ->type == SLOWDOWN)
+                {
+                    players[i]->updateSpeeds(0.5);
+                }
+
+                powerups.erase(powerups.begin()+j);
+
+                break;
+            }
+        }
+        
+        
     }
     
     //bullet collision
@@ -79,6 +108,7 @@ void ofApp::update()
         {
             if(bullets[i]->getCollision(asteroids[j]))
             {
+                players[bullets[i]->playerid]->addScore();
                 splitAsteroid(j);
                 bullets.erase(bullets.begin()+i);
             }
@@ -107,6 +137,11 @@ void ofApp::draw()
         bullets[i]->draw(debug);
     }
     
+    for(int i = 0; i < powerups.size(); i++)
+    {
+        powerups[i]->draw(debug);
+    }
+    
     
     if(debug)
     {
@@ -115,6 +150,14 @@ void ofApp::draw()
         ofDrawBitmapString(ofToString(ofGetFrameRate()), 20, 20);
         ofPopStyle();
     }
+    ofPushStyle();
+    ofSetColor(255);
+    for(int i = 0; i < players.size(); i++)
+    {
+        ofDrawBitmapString("player"+ofToString(i) +":  " + ofToString(players[i]->getScore()), 20, 20*(i+2));
+    }
+    
+    ofPopStyle();
 }
 
 //-------------------------------------------------------------
@@ -244,16 +287,28 @@ void ofApp::killBullet(int & value)
     bullets.erase(bullets.begin());
 }
 
+void ofApp::generatePowerUps()
+{
+    PowerUp* tempo = new PowerUp();
+    tempo->setup(0);
+    powerups.push_back(tempo);
+    
+    PowerUp* tempi = new PowerUp();
+    tempi->setup(1);
+    powerups.push_back(tempi);
+}
+
+
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-    Bullet* temp=new Bullet;
+    Bullet* temp;
     switch(key)
     {
             // If pressed Dm change debug mode
-        //case 't':
-        //    debug = !debug;
-        //    break;
+        case 't':
+            debug = !debug;
+            break;
         case OF_KEY_UP:
             players[0]->updateSpeed(1);
             break;
@@ -266,8 +321,8 @@ void ofApp::keyPressed(int key)
         case OF_KEY_RIGHT:
             players[0]->changeRotation(1);
             break;
-        case ' ':
-            temp = players[0]->fireBullet();
+        case OF_KEY_BACKSPACE:
+            temp = players[0]->fireBullet(0);
             bullets.push_back(temp);
             break;
         case 'w':
@@ -283,7 +338,7 @@ void ofApp::keyPressed(int key)
             players[1]->changeRotation(1);
             break;
         case 'q':
-            temp = players[1]->fireBullet();
+            temp = players[1]->fireBullet(1);
             bullets.push_back(temp);
     }
 }

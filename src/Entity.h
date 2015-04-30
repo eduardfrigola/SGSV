@@ -1,5 +1,8 @@
 #pragma once
 #include "ofMain.h"
+#define SPEEDUP 0
+#define SLOWDOWN 1
+#define PROTECT 2
 
 class Entity
 {

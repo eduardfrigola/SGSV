@@ -10,14 +10,16 @@ class Bullet : public Entity
 		~Bullet();
 	
         virtual bool setup();
-		bool setup(ofPoint spaceShipPosition, ofPoint spaceShipDirection, float size_, float speed_, float lifeTime_);
+		bool setup(ofPoint spaceShipPosition, ofPoint spaceShipDirection, float size_, float speed_, float lifeTime_, int playerid_);
 		virtual void update(float deltaTime);
 		virtual void draw(bool debug);
     
         static ofEvent<int> bulletDead;
-	
+        int playerid;
+    
 	private:
 		// Possible bullet's life control variables
 		float fireDistance;
 		float lifeTime;
+    
 };
